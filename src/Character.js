@@ -5,6 +5,7 @@ function Character({ mansionLayout }) {
   const [position, setPosition] = useState({ row: 0, col: 0 });
 
   useEffect(() => {
+    console.log("Position:", position);
     const handleKeyDown = (e) => {
       const { key } = e;
       let newRow = position.row;
