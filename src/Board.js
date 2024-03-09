@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Board.css";
+import Character from "./Character";
 
 export function BetrayalBoard({ G, ctx, moves }) {
-  const mansionLayout = [["Entrnce Hall", "Foyer", "Grand Staircase"]];
+  const mansionLayout = [["Entrance Hall", "Foyer", "Grand Staircase"]];
+
+  // const [characterPosition, setCharacterPosition] = useState({ row: 0, col: 0 });
+
+  // const moveCharacter = (row, col) => {
+  //   setCharacterPosition({ row, col });
+  // };
 
   const renderMansionLayout = () => {
     return mansionLayout.map((row, rowIndex) => (
@@ -16,5 +23,10 @@ export function BetrayalBoard({ G, ctx, moves }) {
     ));
   };
 
-  return <div className="board">{renderMansionLayout()}</div>;
+  return (
+    <div className="board">
+      {renderMansionLayout()}
+      <Character />
+    </div>
+  );
 }
