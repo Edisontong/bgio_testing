@@ -2,33 +2,32 @@ import React, { useState, useEffect } from "react";
 import "./Character.css";
 
 function Character({ mansionLayout }) {
-  const [position, setPosition] = useState({ row: 0, col: 0 });
+  const [position, setPosition] = useState({ room: "Entrance Hall" }); // Set initial position to "Entrance Hall"
 
   useEffect(() => {
-    console.log("Position:", position);
+    console.log(position);
     const handleKeyDown = (e) => {
       const { key } = e;
-      let newRow = position.row;
-      let newCol = position.col;
+      let newRoom = position.room;
 
       switch (key) {
         case "ArrowUp":
-          newRow = Math.max(0, newRow - 1);
+          newRoom = moveUp(mansionLayout, newRoom);
           break;
         case "ArrowDown":
-          newRow = Math.min(mansionLayout.length - 1, newRow + 1);
+          newRoom = moveDown(mansionLayout, newRoom);
           break;
         case "ArrowLeft":
-          newCol = Math.max(0, newCol - 1);
+          newRoom = moveLeft(mansionLayout, newRoom);
           break;
         case "ArrowRight":
-          newCol = Math.min(mansionLayout[0].length - 1, newCol + 1);
+          newRoom = moveRight(mansionLayout, newRoom);
           break;
         default:
           return;
       }
 
-      setPosition({ row: newRow, col: newCol });
+      setPosition({ room: newRoom });
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -37,6 +36,43 @@ function Character({ mansionLayout }) {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [position, mansionLayout]);
+
+  // Helper functions to determine the new room based on arrow key presses
+  const moveUp = (layout, currentRoom) => {
+    const rowIndex = layout.findIndex((row) => row.includes(currentRoom));
+    const colIndex = layout[rowIndex].indexOf(currentRoom);
+    if (rowIndex > 0) {
+      return layout[rowIndex - 1][colIndex];
+    }
+    return currentRoom;
+  };
+
+  const moveDown = (layout, currentRoom) => {
+    const rowIndex = layout.findIndex((row) => row.includes(currentRoom));
+    const colIndex = layout[rowIndex].indexOf(currentRoom);
+    if (rowIndex < layout.length - 1) {
+      return layout[rowIndex + 1][colIndex];
+    }
+    return currentRoom;
+  };
+
+  const moveLeft = (layout, currentRoom) => {
+    const rowIndex = layout.findIndex((row) => row.includes(currentRoom));
+    const colIndex = layout[rowIndex].indexOf(currentRoom);
+    if (colIndex > 0) {
+      return layout[rowIndex][colIndex - 1];
+    }
+    return currentRoom;
+  };
+
+  const moveRight = (layout, currentRoom) => {
+    const rowIndex = layout.findIndex((row) => row.includes(currentRoom));
+    const colIndex = layout[rowIndex].indexOf(currentRoom);
+    if (colIndex < layout[rowIndex].length - 1) {
+      return layout[rowIndex][colIndex + 1];
+    }
+    return currentRoom;
+  };
 
   return <div className="character" style={{ gridColumn: position.col + 1, gridRow: position.row + 1 }}></div>;
 }
